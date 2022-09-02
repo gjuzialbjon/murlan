@@ -1,1 +1,186 @@
+@use 'sass:math';
+
 /* You can add global styles to this file, and also import other style files */
+$distance: 0.3rem;
+$fontSize: 16px;
+$tiltAngle: 5deg;
+$moveDown: 6px;
+
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+body {
+	display: flex;
+	height: 100vh;
+	align-items: center;
+	justify-content: center;
+	padding: 1rem;
+}
+
+.cards {
+	display: flex;
+	flex-wrap: wrap;
+	list-style: none;
+	gap: 10px;
+}
+
+.card {
+	font-size: 100%;
+	position: relative;
+	background-color: rgb(252, 255, 250);
+	height: 13rem;
+	aspect-ratio: 3.3/5;
+	border: 1px solid gray;
+	border-radius: 10px;
+	padding: 2.2rem;
+	cursor: pointer;
+	box-shadow: 0px 5px 10px 6px rgba(0, 0, 0, 0.2);
+	transition: background-color 0.2s ease-in-out;
+
+	&:not(:first-child) {
+		// margin-left: -1.75rem;
+	}
+
+	&.selected {
+		top: -2rem;
+		background-color: rgb(222, 221, 240);
+	}
+
+	&.warn {
+		background-color: yellow;
+	}
+
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.card-diamond,
+.card-heart {
+	color: #d40000;
+}
+
+.card-top,
+.card-bottom {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	span:not(.card-nr) {
+		font-weight: 800;
+		font-size: calc(1rem + 0.2vw);
+	}
+
+	.card-nr {
+		font-size: 1.65rem;
+		font-weight: 700;
+		line-height: 0.8;
+		letter-spacing: 0;
+	}
+
+	.card-suit {
+		padding-top: 0.3rem;
+		width: 1.3rem;
+		aspect-ratio: 1;
+	}
+}
+
+.card-top {
+	left: $distance;
+	top: $distance * 2;
+}
+
+.card-bottom {
+	right: $distance;
+	bottom: $distance * 2;
+}
+
+.figures {
+	// border: 1px solid rgb(207, 87, 87);
+	height: 100%;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-template-rows: repeat(5, 1fr);
+	gap: 0.5rem;
+	place-items: center;
+}
+
+.figure {
+	position: relative;
+}
+
+.flip {
+	transform: rotate(180deg);
+}
+
+.move-down {
+	margin-top: 1.5rem;
+}
+
+.move-up {
+	margin-bottom: 1.5rem;
+}
+
+@for $i from 1 through 15 {
+	.f-#{$i} {
+		grid-row-start: math.ceil(math.div($i, 3));
+		grid-row-end: math.ceil(math.div($i, 3)) + 1;
+
+		@if $i % 3 == 0 {
+			grid-column-start: 3;
+			grid-column-end: 4;
+		} @else {
+			grid-column-start: $i % 3;
+			grid-column-end: $i % 3 + 1;
+		}
+	}
+}
+
+.f-special {
+	width: 240%;
+}
+
+.jk {
+	width: 340%;
+}
+
+@media (min-width: 768px) {
+	.card:hover {
+		background-color: rgb(222, 221, 240);
+	}
+}
+
+.buttons {
+	padding: 2rem 0;
+	text-align: center;
+}
+
+button {
+	border: 0;
+	padding: 0.6rem 0.9rem;
+	border-radius: 0.5rem;
+	min-width: 80px;
+	cursor: pointer;
+	transition: all 0.24s ease-in;
+	font-size: 1rem;
+	font-weight: 600;
+}
+
+button:disabled,
+button[disabled] {
+	background: #cccccc;
+	color: #666666;
+}
+
+.play {
+	background: blue;
+	color: #ffffff;
+}
